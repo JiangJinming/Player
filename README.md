@@ -1,2 +1,5 @@
 # Player
 一个基于Qt的音乐播放器
+
+注意：
+Qt的多媒体模块，底层是使用DirectShowPlayerService。所以程序可能会需要一个DirectShow解码器才能播放音频，例如LAV Filters
