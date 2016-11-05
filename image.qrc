@@ -5,5 +5,6 @@
         <file>icon/playIcon.png</file>
         <file>icon/previousIcon.png</file>
         <file>icon/stopIcon.png</file>
+        <file>icon/volumeIcon.png</file>
     </qresource>
 </RCC>
