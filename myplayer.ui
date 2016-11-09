@@ -192,8 +192,8 @@
         <widget class="QPushButton" name="chooseButton">
          <property name="geometry">
           <rect>
-           <x>120</x>
-           <y>70</y>
+           <x>130</x>
+           <y>80</y>
            <width>75</width>
            <height>23</height>
           </rect>
@@ -202,7 +202,7 @@
           <string>choose</string>
          </property>
         </widget>
-        <widget class="QListWidget" name="filesListWidget">
+        <widget class="QListWidget" name="dirListWidget">
          <property name="geometry">
           <rect>
            <x>60</x>
@@ -216,9 +216,9 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="fileVerticalLayout">
+      <layout class="QVBoxLayout" name="filesVerticalLayout">
        <item>
-        <spacer name="fileUpVerticalSpacer">
+        <spacer name="filesUpVerticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -234,7 +234,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QListWidget" name="fileListWidget">
+        <widget class="QListWidget" name="filesListWidget">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -266,48 +266,6 @@
         </spacer>
        </item>
       </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>490</y>
-      <width>254</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="playHorizontalLayout">
-     <item>
-      <widget class="QPushButton" name="previousButton">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>previous</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="stopButton">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>stop</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="nextButton">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>next</string>
-       </property>
-      </widget>
      </item>
     </layout>
    </widget>
@@ -369,6 +327,111 @@
        </property>
        <property name="text">
         <string>0</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>36</x>
+      <y>493</y>
+      <width>160</width>
+      <height>58</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="controlHorizontalLayout">
+     <item>
+      <widget class="QPushButton" name="previousButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="image.qrc">
+         <normaloff>:/icon/previousIcon.png</normaloff>:/icon/previousIcon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+Left</string>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="stopButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="image.qrc">
+         <normaloff>:/icon/playIcon.png</normaloff>:/icon/playIcon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>50</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+P</string>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="nextButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="image.qrc">
+         <normaloff>:/icon/playIcon.png</normaloff>:/icon/playIcon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+Right</string>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

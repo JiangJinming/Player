@@ -5,6 +5,7 @@
 #include <QMediaPlayer>
 
 class QMediaPlaylist;
+class QListWidgetItem;
 
 namespace Ui {
 class MyPlayer;
@@ -36,6 +37,7 @@ private:
     //player core
     QMediaPlayer *player;
     QMediaPlaylist *playList;
+    void loadMedia();
 
     //control
     qint64 duration;

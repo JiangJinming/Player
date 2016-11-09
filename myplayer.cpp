@@ -8,6 +8,9 @@
 #include <QString>
 #include <QObject>
 #include <QTime>
+#include <QStringList>
+#include <QFileInfo>
+#include <QDir>
 
 MyPlayer::MyPlayer(QWidget *parent) :
     QMainWindow(parent),
@@ -18,13 +21,14 @@ MyPlayer::MyPlayer(QWidget *parent) :
     player = new QMediaPlayer(this);
     playList = new QMediaPlaylist(this);
 
-    ///************just test*************
+    /************just test*************
     playList->addMedia(QUrl::fromLocalFile("E:/Users/jiang/Desktop/testmusic/All Along the Watchtower.mp3"));
     playList->addMedia(QUrl::fromLocalFile("E:/Users/jiang/Desktop/testmusic/Crazy Train.mp3"));
+    ***********************************/
+    loadMedia();
     player->setPlaylist(playList);
     playList->setCurrentIndex(0);
     playList->setPlaybackMode(QMediaPlaylist::Loop);
-    //***********************************/
 
     //basic data
     QObject::connect(player, SIGNAL(durationChanged(qint64)), this, SLOT(getDuration(qint64)));
@@ -46,6 +50,9 @@ MyPlayer::MyPlayer(QWidget *parent) :
     //next and previous
     QObject::connect(ui->previousButton, SIGNAL(clicked(bool)), playList, SLOT(previous()));
     QObject::connect(ui->nextButton, SIGNAL(clicked(bool)), playList, SLOT(next()));
+
+    //select file
+    QObject::connect(ui->filesListWidget, SIGNAL(currentRowChanged(int)), playList, SLOT(setCurrentIndex(int)));
 
     //************just test**************
     player->setVolume(50);
@@ -130,4 +137,43 @@ void MyPlayer::changePlayerState()
     }
     else
         qDebug() << "error state";
+}
+
+void MyPlayer::loadMedia()
+{
+    int i;
+    int k;
+    QStringList filesList;
+
+    ui->dirListWidget->addItem("E:/Users/jiang/Desktop/testmusic");
+
+    for (i = 0; i < ui->dirListWidget->count(); i++) {
+        QString dirName(ui->dirListWidget->item(i)->text());
+        QFileInfoList filesListInfo;
+        qDebug() << dirName;
+
+        QDir dir(dirName);
+        QStringList filters;
+        filters << "*.mp3";
+        dir.setNameFilters(filters);
+
+        filesListInfo = dir.entryInfoList();
+
+        for (int j = 0; j < filesListInfo.size(); j++) {
+            filesList << filesListInfo.at(j).filePath();
+        }
+    }
+
+    /************just test*************
+    QStringList fileslist;
+    filesList << "E:/Users/jiang/Desktop/testmusic/All Along the Watchtower.mp3"
+         << "E:/Users/jiang/Desktop/testmusic/Crazy Train.mp3";
+    ***********************************/
+
+    for (k = 0; k < filesList.size(); k++) {
+        playList->addMedia(QUrl::fromLocalFile(filesList.at(k)));
+        QListWidgetItem *fileItem = new QListWidgetItem;
+        fileItem->setText(QFileInfo(filesList.at(k)).baseName());
+        ui->filesListWidget->addItem(fileItem);
+    }
 }
