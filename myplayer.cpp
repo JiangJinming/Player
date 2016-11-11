@@ -11,6 +11,11 @@
 #include <QStringList>
 #include <QFileInfo>
 #include <QDir>
+#include <QmessageBox>
+#include <QPixmap>
+#include <QFileDialog>
+#include <QStandardPaths>
+#include <QIcon>
 
 MyPlayer::MyPlayer(QWidget *parent) :
     QMainWindow(parent),
@@ -51,8 +56,12 @@ MyPlayer::MyPlayer(QWidget *parent) :
     QObject::connect(ui->previousButton, SIGNAL(clicked(bool)), playList, SLOT(previous()));
     QObject::connect(ui->nextButton, SIGNAL(clicked(bool)), playList, SLOT(next()));
 
-    //select file
+    //select music from fileList
     QObject::connect(ui->filesListWidget, SIGNAL(currentRowChanged(int)), playList, SLOT(setCurrentIndex(int)));
+
+    //add directory
+    QObject::connect(ui->addDirButton, SIGNAL(clicked(bool)), this, SLOT(addDir()));
+    QObject::connect(ui->refreshButton, SIGNAL(clicked(bool)), this, SLOT(searchLocalFiles()));
 
     //************just test**************
     player->setVolume(50);
@@ -141,11 +150,55 @@ void MyPlayer::changePlayerState()
 
 void MyPlayer::loadMedia()
 {
+    //creat a messagebox if on dir in dirList
+    if (ui->dirListWidget->count() == 0) {
+        QMessageBox msgBox;
+
+        msgBox.setWindowIcon(QIcon(":/icon/dirMessageBoxIcon.png"));
+        msgBox.setWindowTitle("Add Dir");
+        msgBox.setIconPixmap(QPixmap(":/icon/addDir.png"));
+        msgBox.setTextFormat(Qt::RichText);
+        msgBox.setText(QObject::tr("<b>Add a music directory<b/>"));
+        msgBox.setInformativeText(QObject::tr("Do you want add a directory?"));
+        msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+
+        int ret = msgBox.exec();
+        if (ret == QMessageBox::Ok)
+            addDir();
+    }
+}
+
+void MyPlayer::addDir()
+{
+    //get a dir path by a QFileDialog and research all dir
+    QString dir = QFileDialog::getExistingDirectory(this, QObject::tr("Select Directory"), "/home",
+                                                    QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir != "") {
+        //avoid add same dir
+        for (int i = 0; i < ui->dirListWidget->count(); i++)
+            if (dir == ui->dirListWidget->item(i)->text())
+                return;
+
+        //add new dir to dirList
+        ui->dirListWidget->addItem(dir);
+
+        //search files from dirList
+        searchLocalFiles();
+    }
+}
+
+void MyPlayer::searchLocalFiles()
+{
+    //clear all from playList and filesList
+    playList->clear();
+    ui->filesListWidget->clear();
+
     int i;
     int k;
     QStringList filesList;
 
-    ui->dirListWidget->addItem("E:/Users/jiang/Desktop/testmusic");
+    //ui->dirListWidget->addItem("E:/Users/jiang/Desktop/testmusic");
 
     for (i = 0; i < ui->dirListWidget->count(); i++) {
         QString dirName(ui->dirListWidget->item(i)->text());
@@ -159,9 +212,8 @@ void MyPlayer::loadMedia()
 
         filesListInfo = dir.entryInfoList();
 
-        for (int j = 0; j < filesListInfo.size(); j++) {
+        for (int j = 0; j < filesListInfo.size(); j++)
             filesList << filesListInfo.at(j).filePath();
-        }
     }
 
     /************just test*************

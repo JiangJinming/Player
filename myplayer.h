@@ -31,6 +31,9 @@ public slots:
     
     void changePlayerState();
 
+    void addDir();
+    void searchLocalFiles();
+
 private:
     Ui::MyPlayer *ui;
 
@@ -41,7 +44,7 @@ private:
 
     //control
     qint64 duration;
-    QMediaPlayer::State state;
+    QMediaPlayer::State state = QMediaPlayer::StoppedState;
     qint64 position;
     int volume;
 };

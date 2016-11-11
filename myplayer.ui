@@ -176,7 +176,7 @@
         <attribute name="whatsThis">
          <string>sit something</string>
         </attribute>
-        <widget class="QLabel" name="addFolderLabel">
+        <widget class="QLabel" name="addDirLabel">
          <property name="geometry">
           <rect>
            <x>50</x>
@@ -189,7 +189,7 @@
           <string>add folder</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="chooseButton">
+        <widget class="QPushButton" name="addDirButton">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -210,6 +210,19 @@
            <width>256</width>
            <height>192</height>
           </rect>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="refreshButton">
+         <property name="geometry">
+          <rect>
+           <x>250</x>
+           <y>80</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>refresh</string>
          </property>
         </widget>
        </widget>
@@ -332,7 +345,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>36</x>
