@@ -17,8 +17,8 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>500</y>
+      <x>320</x>
+      <y>520</y>
       <width>571</width>
       <height>24</height>
      </rect>
@@ -285,8 +285,8 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>872</x>
-      <y>492</y>
+      <x>910</x>
+      <y>520</y>
       <width>147</width>
       <height>17</height>
      </rect>
@@ -432,7 +432,7 @@
        </property>
        <property name="icon">
         <iconset resource="image.qrc">
-         <normaloff>:/icon/playIcon.png</normaloff>:/icon/playIcon.png</iconset>
+         <normaloff>:/icon/nextIcon.png</normaloff>:/icon/nextIcon.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -449,6 +449,19 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="playbackModeButton">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>510</y>
+      <width>80</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>playbackMode</string>
+    </property>
    </widget>
   </widget>
  </widget>

@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 #include <QMediaPlayer>
+#include <QMediaPlaylist>
 
-class QMediaPlaylist;
 class QListWidgetItem;
 
 namespace Ui {
@@ -29,10 +29,13 @@ public slots:
     void setSliderPostionValue(qint64);
     void setPositionLabelValue(qint64);
     
-    void changePlayerState();
+    void setPlayerState();
 
     void addDir();
     void searchLocalFiles();
+
+    void getPlaybackMode(QMediaPlaylist::PlaybackMode);
+    void setPlaybackMode();
 
 private:
     Ui::MyPlayer *ui;
@@ -47,6 +50,7 @@ private:
     QMediaPlayer::State state = QMediaPlayer::StoppedState;
     qint64 position;
     int volume;
+    QMediaPlaylist::PlaybackMode playbackMode = QMediaPlaylist::Loop;
 };
 
 #endif // MYPLAYER_H

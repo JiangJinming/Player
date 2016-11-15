@@ -2,7 +2,6 @@
 #include "ui_myplayer.h"
 
 #include <QDebug>
-#include <QMediaPlaylist>
 #include <QMediaContent>
 #include <QUrl>
 #include <QString>
@@ -50,7 +49,7 @@ MyPlayer::MyPlayer(QWidget *parent) :
     QObject::connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(setPositionLabelValue(qint64)));
     
     //control state
-    QObject::connect(ui->stopButton, SIGNAL(clicked(bool)), this, SLOT(changePlayerState()));
+    QObject::connect(ui->stopButton, SIGNAL(clicked(bool)), this, SLOT(setPlayerState()));
 
     //next and previous
     QObject::connect(ui->previousButton, SIGNAL(clicked(bool)), playList, SLOT(previous()));
@@ -62,6 +61,10 @@ MyPlayer::MyPlayer(QWidget *parent) :
     //add directory
     QObject::connect(ui->addDirButton, SIGNAL(clicked(bool)), this, SLOT(addDir()));
     QObject::connect(ui->refreshButton, SIGNAL(clicked(bool)), this, SLOT(searchLocalFiles()));
+
+    //set playbackMode
+    QObject::connect(playList, SIGNAL(playbackModeChanged(QMediaPlaylist::PlaybackMode)), this, SLOT(getPlaybackMode(QMediaPlaylist::PlaybackMode)));
+    QObject::connect(ui->playbackModeButton, SIGNAL(clicked(bool)), this, SLOT(setPlaybackMode()));
 
     //************just test**************
     player->setVolume(50);
@@ -116,7 +119,7 @@ void MyPlayer::setVolumeLabelValue(int vol)
 void MyPlayer::setPlayerPositionValue(int pos)
 {
 
-    qDebug() << "silder pos:" << pos;
+    //qDebug() << "silder pos:" << pos;
 
     player->setPosition(static_cast<qint64>(pos));
 }
@@ -124,7 +127,7 @@ void MyPlayer::setPlayerPositionValue(int pos)
 void MyPlayer::setSliderPostionValue(qint64 pos)
 {
 
-    qDebug() << "player pos:" << pos;
+    //qDebug() << "player pos:" << pos;
 
     ui->positionHorizontalSlider->setValue(static_cast<int>(pos));
 }
@@ -134,7 +137,7 @@ void MyPlayer::setPositionLabelValue(qint64 pos)
     ui->positionLabel->setText(QTime::fromMSecsSinceStartOfDay(static_cast<int>(pos)).toString("hh:mm:ss"));
 }
 
-void MyPlayer::changePlayerState()
+void MyPlayer::setPlayerState()
 {
     if (state == QMediaPlayer::StoppedState || state == QMediaPlayer::PausedState) {
         player->play();
@@ -145,7 +148,7 @@ void MyPlayer::changePlayerState()
         player->pause();
     }
     else
-        qDebug() << "error state";
+        qDebug() << "set state error";
 }
 
 void MyPlayer::loadMedia()
@@ -227,5 +230,63 @@ void MyPlayer::searchLocalFiles()
         QListWidgetItem *fileItem = new QListWidgetItem;
         fileItem->setText(QFileInfo(filesList.at(k)).baseName());
         ui->filesListWidget->addItem(fileItem);
+    }
+}
+
+void MyPlayer::getPlaybackMode(QMediaPlaylist::PlaybackMode mode)
+{
+    playbackMode = mode;
+
+    //debug information
+    switch (mode) {
+    case QMediaPlaylist::CurrentItemOnce:
+        qDebug() << "current item once";
+        break;
+    case QMediaPlaylist::CurrentItemInLoop:
+        qDebug() << "current item in loop";
+        break;
+    case QMediaPlaylist::Sequential:
+        qDebug() << "sequential";
+        break;
+    case QMediaPlaylist::Loop:
+        qDebug() << "loop";
+        break;
+    case QMediaPlaylist::Random:
+        qDebug() << "random";
+        break;
+    default:
+        qDebug() << "error playback mode";
+        break;
+    }
+}
+
+void MyPlayer::setPlaybackMode()
+{
+    switch (playbackMode) {
+    case QMediaPlaylist::CurrentItemOnce:
+        playList->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+
+        //change icon and other
+        break;
+    case QMediaPlaylist::CurrentItemInLoop:
+        playList->setPlaybackMode(QMediaPlaylist::Sequential);
+
+        break;
+    case QMediaPlaylist::Sequential:
+        playList->setPlaybackMode(QMediaPlaylist::Loop);
+
+        break;
+    case QMediaPlaylist::Loop:
+        playList->setPlaybackMode(QMediaPlaylist::Random);
+
+        break;
+
+    case QMediaPlaylist::Random:
+        playList->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
+
+        break;
+    default:
+        qDebug() << "set playback mode error";
+        break;
     }
 }
