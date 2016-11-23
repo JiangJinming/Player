@@ -6,6 +6,7 @@
 #include <QMediaPlaylist>
 
 class QListWidgetItem;
+class QCloseEvent;
 
 namespace Ui {
 class MyPlayer;
@@ -51,6 +52,15 @@ private:
     qint64 position;
     int volume;
     QMediaPlaylist::PlaybackMode playbackMode = QMediaPlaylist::Loop;
+
+    //save player information
+    void saveCurrentInfo();
+
+    //init
+    void init();
+
+protected:
+    void closeEvent(QCloseEvent *);
 };
 
 #endif // MYPLAYER_H

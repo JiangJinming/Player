@@ -15,6 +15,10 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QIcon>
+#include <QCloseEvent>
+#include <QIODevice>
+#include <QDataStream>
+#include <QSettings>
 
 MyPlayer::MyPlayer(QWidget *parent) :
     QMainWindow(parent),
@@ -25,14 +29,12 @@ MyPlayer::MyPlayer(QWidget *parent) :
     player = new QMediaPlayer(this);
     playList = new QMediaPlaylist(this);
 
+    player->setPlaylist(playList);
+
     /************just test*************
     playList->addMedia(QUrl::fromLocalFile("E:/Users/jiang/Desktop/testmusic/All Along the Watchtower.mp3"));
     playList->addMedia(QUrl::fromLocalFile("E:/Users/jiang/Desktop/testmusic/Crazy Train.mp3"));
     ***********************************/
-    loadMedia();
-    player->setPlaylist(playList);
-    playList->setCurrentIndex(0);
-    playList->setPlaybackMode(QMediaPlaylist::Loop);
 
     //basic data
     QObject::connect(player, SIGNAL(durationChanged(qint64)), this, SLOT(getDuration(qint64)));
@@ -66,9 +68,13 @@ MyPlayer::MyPlayer(QWidget *parent) :
     QObject::connect(playList, SIGNAL(playbackModeChanged(QMediaPlaylist::PlaybackMode)), this, SLOT(getPlaybackMode(QMediaPlaylist::PlaybackMode)));
     QObject::connect(ui->playbackModeButton, SIGNAL(clicked(bool)), this, SLOT(setPlaybackMode()));
 
-    //************just test**************
+    /************just test**************
     player->setVolume(50);
     player->play();
+    ***********************************/
+
+    //init
+    init();
 }
 
 MyPlayer::~MyPlayer()
@@ -289,4 +295,62 @@ void MyPlayer::setPlaybackMode()
         qDebug() << "set playback mode error";
         break;
     }
+}
+
+void MyPlayer::closeEvent(QCloseEvent *event)
+{
+    qDebug() << "close";
+    saveCurrentInfo();
+    event->accept();
+}
+
+void MyPlayer::saveCurrentInfo()
+{
+    qDebug() << "save";
+
+    //save dirList
+    int dirListCount = ui->dirListWidget->count();
+
+    QFile DirListData("DirList.dat");
+    DirListData.open(QIODevice::WriteOnly);
+
+    QDataStream out(&DirListData);
+    out << dirListCount;
+    for (int i = 0; i < dirListCount; i++) {
+        out << ui->dirListWidget->item(i)->text();
+    }
+    DirListData.close();
+
+    //save setting
+    QSettings settings("Jiang", "Player");
+    settings.setValue("duration", duration);
+    settings.setValue("playerstate", state);
+    settings.setValue("position", position);
+    settings.setValue("volume", volume);
+    settings.setValue("playbackmode", playbackMode);
+}
+
+void MyPlayer::init()
+{
+    int dirListCount;
+
+    QFile DirListData("DirList.dat");
+    DirListData.open(QIODevice::ReadOnly);
+
+    QDataStream in(&DirListData);
+    in >> dirListCount;
+    qDebug() << "init list count:" << dirListCount;
+    for(int i = 0; i < dirListCount; i++) {
+        QString text;
+        in >> text;
+        qDebug() << text;
+
+        ui->dirListWidget->addItem(text);
+    }
+
+    QSettings settings("Jiang", "Player");
+    playList->setCurrentIndex(0);
+    playList->setPlaybackMode(QMediaPlaylist::Loop);
+
+    loadMedia();
 }
