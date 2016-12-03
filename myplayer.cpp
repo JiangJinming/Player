@@ -26,7 +26,7 @@ MyPlayer::MyPlayer(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    player = new QMediaPlayer(this);
+    player = new MyMediaPlayer(this);
     playList = new QMediaPlaylist(this);
 
     player->setPlaylist(playList);
@@ -38,7 +38,6 @@ MyPlayer::MyPlayer(QWidget *parent) :
 
     //basic data
     QObject::connect(player, SIGNAL(durationChanged(qint64)), this, SLOT(getDuration(qint64)));
-    QObject::connect(player, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(getState(QMediaPlayer::State)));
 
     //control volume
     QObject::connect(ui->volumeHorizontalSlider, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
@@ -46,12 +45,12 @@ MyPlayer::MyPlayer(QWidget *parent) :
     QObject::connect(player, SIGNAL(volumeChanged(int)), this, SLOT(setVolumeLabelValue(int)));
 
     //control position
-    QObject::connect(ui->positionHorizontalSlider, SIGNAL(sliderMoved(int)), this, SLOT(setPlayerPositionValue(int)));
+    QObject::connect(ui->positionHorizontalSlider, SIGNAL(sliderMoved(int)), player, SLOT(setPlayerPositionValue(int)));
     QObject::connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(setSliderPostionValue(qint64)));
     QObject::connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(setPositionLabelValue(qint64)));
     
     //control state
-    QObject::connect(ui->stopButton, SIGNAL(clicked(bool)), this, SLOT(setPlayerState()));
+    QObject::connect(ui->stopButton, SIGNAL(clicked(bool)), player, SLOT(setPlayerState()));
 
     //next and previous
     QObject::connect(ui->previousButton, SIGNAL(clicked(bool)), playList, SLOT(previous()));
@@ -96,38 +95,9 @@ void MyPlayer::getDuration(qint64 dur)
     ui->durationLabel->setText(QTime::fromMSecsSinceStartOfDay(static_cast<int>(duration)).toString("hh:mm:ss"));
 }
 
-void MyPlayer::getState(QMediaPlayer::State sta)
-{
-    state = sta;
-
-    //debug information
-    switch (state) {
-    case QMediaPlayer::StoppedState:
-        qDebug() << "stopped state";
-        break;
-    case QMediaPlayer::PlayingState:
-        qDebug() << "playing state";
-        break;
-    case QMediaPlayer::PausedState:
-        qDebug() << "pause state";
-        break;
-    default:
-        qDebug() << "error state";
-        break;
-    }
-}
-
 void MyPlayer::setVolumeLabelValue(int vol)
 {
     ui->volumeLabel->setText(QString::number(vol));
-}
-
-void MyPlayer::setPlayerPositionValue(int pos)
-{
-
-    //qDebug() << "silder pos:" << pos;
-
-    player->setPosition(static_cast<qint64>(pos));
 }
 
 void MyPlayer::setSliderPostionValue(qint64 pos)
@@ -141,20 +111,6 @@ void MyPlayer::setSliderPostionValue(qint64 pos)
 void MyPlayer::setPositionLabelValue(qint64 pos)
 {
     ui->positionLabel->setText(QTime::fromMSecsSinceStartOfDay(static_cast<int>(pos)).toString("hh:mm:ss"));
-}
-
-void MyPlayer::setPlayerState()
-{
-    if (state == QMediaPlayer::StoppedState || state == QMediaPlayer::PausedState) {
-        player->play();
-        
-        //change icon and other
-    }
-    else if (state == QMediaPlayer::PlayingState) {
-        player->pause();
-    }
-    else
-        qDebug() << "set state error";
 }
 
 void MyPlayer::loadMedia()
@@ -252,13 +208,13 @@ void MyPlayer::getPlaybackMode(QMediaPlaylist::PlaybackMode mode)
         qDebug() << "current item in loop";
         break;
     case QMediaPlaylist::Sequential:
-        qDebug() << "sequential";
+        qDebug() << "current item sequential";
         break;
     case QMediaPlaylist::Loop:
-        qDebug() << "loop";
+        qDebug() << "current item loop";
         break;
     case QMediaPlaylist::Random:
-        qDebug() << "random";
+        qDebug() << "current item random";
         break;
     default:
         qDebug() << "error playback mode";
@@ -322,9 +278,9 @@ void MyPlayer::saveCurrentInfo()
     DirListData.close();
 
     //save setting
-    QSettings settings("Jiang", "Player");
+    QSettings settings("sets.ini", QSettings::IniFormat);
     settings.setValue("duration", duration);
-    settings.setValue("playerstate", state);
+    //settings.setValue("playerstate", state);
     settings.setValue("position", position);
     settings.setValue("volume", volume);
     settings.setValue("playbackmode", playbackMode);
@@ -348,9 +304,17 @@ void MyPlayer::init()
         ui->dirListWidget->addItem(text);
     }
 
-    QSettings settings("Jiang", "Player");
-    playList->setCurrentIndex(0);
-    playList->setPlaybackMode(QMediaPlaylist::Loop);
+    QSettings settings("sets.ini", "Player");
+    //playList->setCurrentIndex(static_cast<qint64>(settings.value("duration").toInt()));
+
+    //state = static_cast<MyMediaPlayer::State>(settings.value("playerstate").toInt());
+    //this->setPlayerState();
+
+    player->setPlayerPositionValue(settings.value("position").toInt());
+    player->setVolume(settings.value("volume").toInt());
+
+    playbackMode = static_cast<QMediaPlaylist::PlaybackMode>(settings.value("playbackmode").toInt());
+    this->setPlaybackMode();
 
     loadMedia();
 }

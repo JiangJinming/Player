@@ -14,9 +14,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        myplayer.cpp
+        myplayer.cpp \
+    mymediaplayer.cpp
 
-HEADERS  += myplayer.h
+HEADERS  += myplayer.h \
+    mymediaplayer.h
 
 FORMS    += myplayer.ui
 
