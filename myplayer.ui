@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1186</width>
-    <height>565</height>
+    <height>701</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>320</x>
-      <y>520</y>
+      <y>620</y>
       <width>571</width>
       <height>24</height>
      </rect>
@@ -51,7 +51,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>20</y>
+      <y>120</y>
       <width>1071</width>
       <height>451</height>
      </rect>
@@ -286,7 +286,7 @@
     <property name="geometry">
      <rect>
       <x>910</x>
-      <y>520</y>
+      <y>620</y>
       <width>147</width>
       <height>17</height>
      </rect>
@@ -349,7 +349,7 @@
     <property name="geometry">
      <rect>
       <x>36</x>
-      <y>493</y>
+      <y>593</y>
       <width>160</width>
       <height>58</height>
      </rect>
@@ -454,7 +454,7 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>510</y>
+      <y>610</y>
       <width>80</width>
       <height>20</height>
      </rect>
@@ -463,9 +463,27 @@
      <string>playbackMode</string>
     </property>
    </widget>
+   <widget class="MyTitleBar" name="titleBar" native="true">
+    <property name="geometry">
+     <rect>
+      <x>-1</x>
+      <y>-1</y>
+      <width>1191</width>
+      <height>91</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MyTitleBar</class>
+   <extends>QWidget</extends>
+   <header location="global">mytitlebar.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="image.qrc"/>
  </resources>

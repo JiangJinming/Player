@@ -8,6 +8,7 @@
 
 class QListWidgetItem;
 class QCloseEvent;
+class QPoint;
 
 namespace Ui {
 class MyPlayer;
@@ -34,6 +35,8 @@ public slots:
 
     void getPlaybackMode(QMediaPlaylist::PlaybackMode);
     void setPlaybackMode();
+
+    void moveWindow(const QPoint &point);
 
 private:
     Ui::MyPlayer *ui;

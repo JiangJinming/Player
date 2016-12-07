@@ -19,6 +19,7 @@
 #include <QIODevice>
 #include <QDataStream>
 #include <QSettings>
+#include <QPoint>
 
 MyPlayer::MyPlayer(QWidget *parent) :
     QMainWindow(parent),
@@ -66,6 +67,9 @@ MyPlayer::MyPlayer(QWidget *parent) :
     //set playbackMode
     QObject::connect(playList, SIGNAL(playbackModeChanged(QMediaPlaylist::PlaybackMode)), this, SLOT(getPlaybackMode(QMediaPlaylist::PlaybackMode)));
     QObject::connect(ui->playbackModeButton, SIGNAL(clicked(bool)), this, SLOT(setPlaybackMode()));
+
+    //move main window
+    QObject::connect(ui->titleBar, SIGNAL(dragWindow(QPoint)), this, SLOT(moveWindow(QPoint)));
 
     /************just test**************
     player->setVolume(50);
@@ -317,4 +321,9 @@ void MyPlayer::init()
     this->setPlaybackMode();
 
     loadMedia();
+}
+
+void MyPlayer::moveWindow(const QPoint &point)
+{
+    this->move(this->pos() + point);
 }
