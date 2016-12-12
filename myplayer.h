@@ -4,8 +4,7 @@
 #include <QMainWindow>
 #include <QMediaPlaylist>
 
-#include "mymediaplayer.h"
-
+class MyMediaPlayer;
 class QListWidgetItem;
 class QCloseEvent;
 class QPoint;

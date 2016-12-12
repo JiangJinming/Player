@@ -1,5 +1,6 @@
 #include "myplayer.h"
 #include "ui_myplayer.h"
+#include "mymediaplayer.h"
 
 #include <QDebug>
 #include <QMediaContent>
@@ -292,6 +293,10 @@ void MyPlayer::saveCurrentInfo()
 
 void MyPlayer::init()
 {
+    //set title bar size
+    ui->titleBar->setGeometry(0, 0, this->width(), 75);
+
+
     int dirListCount;
 
     QFile DirListData("DirList.dat");

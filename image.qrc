@@ -8,5 +8,13 @@
         <file>icon/volumeIcon.png</file>
         <file>icon/addDir.png</file>
         <file>icon/dirMessageBoxIcon.png</file>
+        <file>icon/clicked.png</file>
+        <file>icon/default.png</file>
+        <file>icon/titlebarIcons/closeClickIcon.png</file>
+        <file>icon/titlebarIcons/closeDefaultIcon.png</file>
+        <file>icon/titlebarIcons/maximizeClickIcon.png</file>
+        <file>icon/titlebarIcons/maximizeDefaultIcon.png</file>
+        <file>icon/titlebarIcons/minimizeClickIcon.png</file>
+        <file>icon/titlebarIcons/minimizeDefaultIcon.png</file>
     </qresource>
 </RCC>

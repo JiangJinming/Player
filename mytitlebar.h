@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+class MyTitleBarButton;
 class QMouseEvent;
 class QPaintEvent;
 class QPushButton;
@@ -35,12 +36,13 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *);
     void paintEvent(QPaintEvent *);
 
-    QPushButton *minimizeButton;
-    QPushButton *maximizeButton;
-    QPushButton *closeButton;
+    MyTitleBarButton *minimizeButton;
+    MyTitleBarButton *maximizeButton;
+    MyTitleBarButton *closeButton;
 
     QHBoxLayout *mainHLayout;
-    QSpacerItem *HSpacerItem;
+    QSpacerItem *HLeftSpacerItem;
+    QSpacerItem *HRightSpacerItem;
 
     QColor *titleColor;
 

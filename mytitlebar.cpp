@@ -1,4 +1,5 @@
 #include "mytitlebar.h"
+#include "mytitlebarbutton.h"
 
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -14,21 +15,37 @@
 MyTitleBar::MyTitleBar(QWidget *parent)
     : QWidget(parent)
 {
-    minimizeButton = new QPushButton(this);
-    maximizeButton = new QPushButton(this);
-    closeButton = new QPushButton(this);
-
-    mainHLayout = new QHBoxLayout(this);
-
-    HSpacerItem = new QSpacerItem(0, minimizeButton->height(),
-                                  QSizePolicy::Expanding, QSizePolicy::Fixed);
-
     titleColor = new QColor(198, 47, 47);
 
-    mainHLayout->addItem(HSpacerItem);
+    minimizeButton = new MyTitleBarButton(this);
+    minimizeButton->setFixedSize(20, 20);
+    minimizeButton->setBackgroundColor(*titleColor);
+    minimizeButton->setDefaultIcon(":/icon/titlebarIcons/minimizeDefaultIcon.png");
+    minimizeButton->setClickedIcon(":/icon/titlebarIcons/minimizeClickIcon.png");
+
+    maximizeButton = new MyTitleBarButton(this);
+    maximizeButton->setFixedSize(20, 20);
+    maximizeButton->setBackgroundColor(*titleColor);
+    maximizeButton->setDefaultIcon(":/icon/titlebarIcons/maximizeDefaultIcon.png");
+    maximizeButton->setClickedIcon(":/icon/titlebarIcons/maximizeClickIcon.png");
+
+    closeButton = new MyTitleBarButton(this);
+    closeButton->setFixedSize(20, 20);
+    closeButton->setBackgroundColor(*titleColor);
+    closeButton->setDefaultIcon(":/icon/titlebarIcons/closeDefaultIcon.png");
+    closeButton->setClickedIcon(":/icon/titlebarIcons/closeClickIcon.png");
+
+    mainHLayout = new QHBoxLayout(this);
+    HLeftSpacerItem = new QSpacerItem(0, minimizeButton->height(),
+                                  QSizePolicy::Expanding, QSizePolicy::Fixed);
+    HRightSpacerItem = new QSpacerItem(15, minimizeButton->height(),
+                                     QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    mainHLayout->addItem(HLeftSpacerItem);
     mainHLayout->addWidget(minimizeButton);
     mainHLayout->addWidget(maximizeButton);
     mainHLayout->addWidget(closeButton);
+    mainHLayout->addSpacerItem(HRightSpacerItem);
 }
 
 MyTitleBar::~MyTitleBar()
@@ -68,7 +85,7 @@ void MyTitleBar::paintEvent(QPaintEvent *)
     QPainter painter(this);
 
     painter.setBrush(QBrush(*titleColor));
-    painter.drawRect(0, 0, this->width(), this->height());
+    painter.drawRect(-1, 0, this->width() + 1, this->height());
 }
 
 void MyTitleBar::setTitleColor(const QColor &color)
