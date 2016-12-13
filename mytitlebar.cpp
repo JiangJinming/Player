@@ -35,6 +35,10 @@ MyTitleBar::MyTitleBar(QWidget *parent)
     closeButton->setDefaultIcon(":/icon/titlebarIcons/closeDefaultIcon.png");
     closeButton->setClickedIcon(":/icon/titlebarIcons/closeClickIcon.png");
 
+    QObject::connect(minimizeButton, SIGNAL(buttonClicked()), this, SLOT(minimizeButtonClicked()));
+    QObject::connect(maximizeButton, SIGNAL(buttonClicked()), this, SLOT(maximizeButtonClicked()));
+    QObject::connect(closeButton, SIGNAL(buttonClicked()), this, SLOT(closeButtonClicked()));
+
     mainHLayout = new QHBoxLayout(this);
     HLeftSpacerItem = new QSpacerItem(0, minimizeButton->height(),
                                   QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -93,4 +97,26 @@ void MyTitleBar::setTitleColor(const QColor &color)
     *titleColor = color;
 
     this->update();
+}
+
+void MyTitleBar::minimizeButtonClicked()
+{
+    qDebug() << "emit 'Minimize' signal";
+
+    emit windowStateChanged(MyTitleBar::Minimize);
+}
+
+void MyTitleBar::maximizeButtonClicked()
+{
+    qDebug() << "emit 'Maximize' signal";
+
+    emit windowStateChanged(MyTitleBar::Maximize);
+}
+
+void MyTitleBar::closeButtonClicked()
+{
+    qDebug() << "emit 'Close' signal";
+
+    emit windowStateChanged(MyTitleBar::Close);
+
 }

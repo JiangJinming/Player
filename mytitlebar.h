@@ -25,6 +25,11 @@ public:
 public slots:
     void setTitleColor(const QColor &color);
 
+    //button clicked
+    void minimizeButtonClicked();
+    void maximizeButtonClicked();
+    void closeButtonClicked();
+
 signals:
     void windowStateChanged(MyTitleBar::WindowState state);
     void dragWindow(const QPoint &point);

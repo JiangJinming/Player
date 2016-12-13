@@ -1,6 +1,8 @@
 #ifndef MYPLAYER_H
 #define MYPLAYER_H
 
+#include "mytitlebar.h"
+
 #include <QMainWindow>
 #include <QMediaPlaylist>
 
@@ -35,7 +37,9 @@ public slots:
     void getPlaybackMode(QMediaPlaylist::PlaybackMode);
     void setPlaybackMode();
 
+    //titlebar control mainWindow
     void moveWindow(const QPoint &point);
+    void setMainWindowState(MyTitleBar::WindowState state);
 
 private:
     Ui::MyPlayer *ui;
@@ -56,6 +60,9 @@ private:
 
     //init
     void init();
+
+    //when clicked closeButton(titlebar)
+    void closeWindow();
 
 protected:
     void closeEvent(QCloseEvent *);

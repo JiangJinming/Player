@@ -69,8 +69,9 @@ MyPlayer::MyPlayer(QWidget *parent) :
     QObject::connect(playList, SIGNAL(playbackModeChanged(QMediaPlaylist::PlaybackMode)), this, SLOT(getPlaybackMode(QMediaPlaylist::PlaybackMode)));
     QObject::connect(ui->playbackModeButton, SIGNAL(clicked(bool)), this, SLOT(setPlaybackMode()));
 
-    //move main window
+    //control mainWindow by titleBar
     QObject::connect(ui->titleBar, SIGNAL(dragWindow(QPoint)), this, SLOT(moveWindow(QPoint)));
+    QObject::connect(ui->titleBar, SIGNAL(windowStateChanged(MyTitleBar::WindowState)), this, SLOT(setMainWindowState(MyTitleBar::WindowState)));
 
     /************just test**************
     player->setVolume(50);
@@ -331,4 +332,28 @@ void MyPlayer::init()
 void MyPlayer::moveWindow(const QPoint &point)
 {
     this->move(this->pos() + point);
+}
+
+void MyPlayer::setMainWindowState(MyTitleBar::WindowState state)
+{
+    switch (state) {
+    case MyTitleBar::Minimize:
+        this->setWindowState(Qt::WindowMinimized);
+        break;
+
+    case MyTitleBar::Maximize:
+        this->setWindowState(Qt::WindowMaximized);
+        break;
+
+    case MyTitleBar::Close:
+        this->closeWindow();
+
+    default:
+        qDebug() << "set 'Main Window State' error";
+    }
+}
+
+void MyPlayer::closeWindow()
+{
+    this->close();
 }
