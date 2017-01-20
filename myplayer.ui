@@ -78,82 +78,22 @@
            <x>20</x>
            <y>20</y>
            <width>271</width>
-           <height>381</height>
+           <height>441</height>
           </rect>
          </property>
          <property name="title">
           <string>Info</string>
          </property>
-        </widget>
-        <widget class="QWidget" name="layoutWidget">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>60</y>
-           <width>171</width>
-           <height>311</height>
-          </rect>
-         </property>
-         <layout class="QVBoxLayout" name="infoVerticalLayout">
-          <item>
-           <widget class="QLabel" name="coverLabel">
-            <property name="font">
-             <font>
-              <family>Adobe Arabic</family>
-              <pointsize>72</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>cover</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="infoVerticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="fileInfoVerticalLayout">
-            <item>
-             <widget class="QLabel" name="titleLabel">
-              <property name="text">
-               <string>title</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="artistLabel">
-              <property name="text">
-               <string>artist</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="albumLabel">
-              <property name="text">
-               <string>album</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="yearLabel">
-              <property name="text">
-               <string>year</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
+         <widget class="MyInfoWidget" name="infoWidget" native="true">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>40</y>
+            <width>211</width>
+            <height>381</height>
+           </rect>
+          </property>
+         </widget>
         </widget>
         <widget class="QLabel" name="templabel">
          <property name="geometry">
@@ -480,7 +420,13 @@
   <customwidget>
    <class>MyTitleBar</class>
    <extends>QWidget</extends>
-   <header location="global">mytitlebar.h</header>
+   <header>mytitlebar.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MyInfoWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">myinfowidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

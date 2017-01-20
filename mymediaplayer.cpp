@@ -1,11 +1,16 @@
 #include "mymediaplayer.h"
 
+#include <QVariant>
+#include <QDebug>
+
 MyMediaPlayer::MyMediaPlayer(QObject *parent) :
     QMediaPlayer(parent)
 {
     state = QMediaPlayer::StoppedState;
 
     QObject::connect(this, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(getState(QMediaPlayer::State)));
+    //send meta data
+    QObject::connect(this, SIGNAL(durationChanged(qint64)), this, SLOT(sendMetaData()));
 }
 
 void MyMediaPlayer::setPlayerPositionValue(int pos)
@@ -32,4 +37,18 @@ void MyMediaPlayer::setPlayerState()
 
     else
         qDebug() << "set state error";
+}
+
+void MyMediaPlayer::sendMetaData()
+{
+    //qDebug() << metaData("Year").toInt();
+    //qDebug() << metaData("Title").toString();
+
+    data.coverArtImage = this->metaData("CoverArtImage");
+    data.title = this->metaData("Title").toString();
+    data.author = this->metaData("Author").toString();
+    data.albumTitle = this->metaData("AlbumTitle").toString();
+    data.year = this->metaData("Year").toString();
+
+    emit flashMetaData(data);
 }

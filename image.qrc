@@ -16,5 +16,6 @@
         <file>icon/titlebarIcons/maximizeDefaultIcon.png</file>
         <file>icon/titlebarIcons/minimizeClickIcon.png</file>
         <file>icon/titlebarIcons/minimizeDefaultIcon.png</file>
+        <file>icon/coverIcon.png</file>
     </qresource>
 </RCC>

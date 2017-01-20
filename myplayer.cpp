@@ -1,6 +1,7 @@
 #include "myplayer.h"
 #include "ui_myplayer.h"
 #include "mymediaplayer.h"
+#include "mymetadata.h"
 
 #include <QDebug>
 #include <QMediaContent>
@@ -72,6 +73,9 @@ MyPlayer::MyPlayer(QWidget *parent) :
     //control mainWindow by titleBar
     QObject::connect(ui->titleBar, SIGNAL(dragWindow(QPoint)), this, SLOT(moveWindow(QPoint)));
     QObject::connect(ui->titleBar, SIGNAL(windowStateChanged(MyTitleBar::WindowState)), this, SLOT(setMainWindowState(MyTitleBar::WindowState)));
+
+    //flash info widget
+    QObject::connect(player, SIGNAL(flashMetaData(MyMetaData)), ui->infoWidget, SLOT(flashWidgetInfo(MyMetaData)));
 
     /************just test**************
     player->setVolume(50);
@@ -347,6 +351,7 @@ void MyPlayer::setMainWindowState(MyTitleBar::WindowState state)
 
     case MyTitleBar::Close:
         this->closeWindow();
+        break;
 
     default:
         qDebug() << "set 'Main Window State' error";

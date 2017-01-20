@@ -17,12 +17,16 @@ SOURCES += main.cpp\
         myplayer.cpp \
     mymediaplayer.cpp \
     mytitlebar.cpp \
-    mytitlebarbutton.cpp
+    mytitlebarbutton.cpp \
+    myinfowidget.cpp \
+    mymetadata.cpp
 
 HEADERS  += myplayer.h \
     mymediaplayer.h \
     mytitlebar.h \
-    mytitlebarbutton.h
+    mytitlebarbutton.h \
+    myinfowidget.h \
+    mymetadata.h
 
 FORMS    += myplayer.ui
 
