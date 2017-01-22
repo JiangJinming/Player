@@ -24,23 +24,25 @@ MyInfoWidget::MyInfoWidget(QWidget *parent)
     defaultCoverIcon = new QPixmap(":/icon/coverIcon.png");
 
     coverArtImageLabel = new QLabel(this);
+    coverArtImageLabel->setScaledContents(true);
     coverArtImageLabel->setPixmap(*defaultCoverIcon);
+    coverArtImageLabel->setMaximumSize(200, 200);
 
     titleLabel = new QLabel(this);
     titleLabel->setFont(QFont("Microsoft Yahei", 14, -1, "italic"));
-    titleLabel->setText("title");
+    titleLabel->setText(QObject::tr(("title")));
 
     authorLabel = new QLabel(this);
     authorLabel->setFont(QFont("Microsoft Yahei", 14));
-    authorLabel->setText("author");
+    authorLabel->setText(QObject::tr(("author")));
 
     albumTitleLabel = new QLabel(this);
     albumTitleLabel->setFont(QFont("Microsoft Yahei", 14));
-    albumTitleLabel->setText("album");
+    albumTitleLabel->setText(QObject::tr(("album")));
 
     yearLabel = new QLabel(this);
     yearLabel->setFont(QFont("Microsoft Yahei", 14));
-    yearLabel->setText("year");
+    yearLabel->setText(QObject::tr(("year")));
 
     mainLayout = new QVBoxLayout(this);
     spacer = new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding);
@@ -59,12 +61,35 @@ void MyInfoWidget::flashWidgetInfo(const MyMetaData &data)
 {
     qDebug() << "flashed info widget";
 
-    if (data.title != 0)
+    //cover
+    if (data.coverArtImage.isNull())
+        this->coverArtImageLabel->setPixmap(QPixmap(":/icon/coverIcon.png"));
+    else {
+        QPixmap pixmap = QPixmap::fromImage(data.coverArtImage);
+        this->coverArtImageLabel->setPixmap(pixmap);
+    }
+
+    //title
+    if (data.title.isEmpty())
+        this->titleLabel->setText(QObject::tr("title: null"));
+    else
         this->titleLabel->setText(data.title);
-    if (data.author != 0)
+
+    //author
+    if (data.author.isEmpty())
+        this->authorLabel->setText(QObject::tr("author: null"));
+    else
         this->authorLabel->setText(data.author);
-    if (data.albumTitle != 0)
+
+    //album
+    if (data.albumTitle.isEmpty())
+        this->albumTitleLabel->setText(QObject::tr("album: null"));
+    else
         this->albumTitleLabel->setText(data.albumTitle);
-    if (data.year != 0)
+
+    //year
+    if (data.year.isEmpty())
+        this->yearLabel->setText(QObject::tr("year: null"));
+    else
         this->yearLabel->setText(data.year);
 }

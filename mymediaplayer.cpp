@@ -2,6 +2,7 @@
 
 #include <QVariant>
 #include <QDebug>
+#include <QImage>
 
 MyMediaPlayer::MyMediaPlayer(QObject *parent) :
     QMediaPlayer(parent)
@@ -44,7 +45,8 @@ void MyMediaPlayer::sendMetaData()
     //qDebug() << metaData("Year").toInt();
     //qDebug() << metaData("Title").toString();
 
-    data.coverArtImage = this->metaData("CoverArtImage");
+    data.coverArtImage = this->metaData("ThumbnailImage").value<QImage>();
+
     data.title = this->metaData("Title").toString();
     data.author = this->metaData("Author").toString();
     data.albumTitle = this->metaData("AlbumTitle").toString();

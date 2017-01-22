@@ -2,14 +2,14 @@
 #define MYMETADATA_H
 
 #include <QString>
-#include <QVariant>
+#include <QImage>
 
 class MyMetaData
 {
 public:
     MyMetaData();
 
-    QVariant coverArtImage;
+    QImage coverArtImage;
 
     QString title;
     QString author;
