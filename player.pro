@@ -19,14 +19,18 @@ SOURCES += main.cpp\
     mytitlebar.cpp \
     mytitlebarbutton.cpp \
     myinfowidget.cpp \
-    mymetadata.cpp
+    mymetadata.cpp \
+    mylrcsentence.cpp \
+    mylrcwidget.cpp
 
 HEADERS  += myplayer.h \
     mymediaplayer.h \
     mytitlebar.h \
     mytitlebarbutton.h \
     myinfowidget.h \
-    mymetadata.h
+    mymetadata.h \
+    mylrcsentence.h \
+    mylrcwidget.h
 
 FORMS    += myplayer.ui
 

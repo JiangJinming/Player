@@ -95,17 +95,14 @@
           </property>
          </widget>
         </widget>
-        <widget class="QLabel" name="templabel">
+        <widget class="MyLRCWidget" name="LRCWidget" native="true">
          <property name="geometry">
           <rect>
-           <x>320</x>
-           <y>30</y>
-           <width>341</width>
-           <height>371</height>
+           <x>330</x>
+           <y>60</y>
+           <width>451</width>
+           <height>381</height>
           </rect>
-         </property>
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;jshadfdsjkfhdsfsoiewor&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;jhfjkdshfdsjfhdsj&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;jhfgjfhdgfdgfgfd&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;dfgjhfgfj&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;dsfdfdsfdsfdsf&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </widget>
@@ -194,11 +191,14 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="frameShape">
-          <enum>QFrame::HLine</enum>
+         <property name="styleSheet">
+          <string notr="true"/>
          </property>
-         <property name="frameShadow">
-          <enum>QFrame::Sunken</enum>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="lineWidth">
+          <number>2</number>
          </property>
         </widget>
        </item>
@@ -426,7 +426,13 @@
   <customwidget>
    <class>MyInfoWidget</class>
    <extends>QWidget</extends>
-   <header location="global">myinfowidget.h</header>
+   <header>myinfowidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MyLRCWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">mylrcwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
