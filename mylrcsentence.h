@@ -11,9 +11,11 @@ public:
     MyLRCSentence();
     void setSentence(const QString &str);
     QString getSentence();
-    
+
+    void setPosition(const qint64 &pos);
+    qint64 getPosition();
 private:
-    qint64 duration;
+    qint64 position;
     QString sentence;
 };
 

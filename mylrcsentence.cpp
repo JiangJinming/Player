@@ -15,3 +15,13 @@ QString MyLRCSentence::getSentence()
 {
     return sentence;
 }
+
+void MyLRCSentence::setPosition(const qint64 &pos)
+{
+    position = pos;
+}
+
+qint64 MyLRCSentence::getPosition()
+{
+    return position;
+}

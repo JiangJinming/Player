@@ -1,6 +1,8 @@
 #ifndef MYLRCWIDGET_H
 #define MYLRCWIDGET_H
 
+#define LINESPACING 10
+
 #include "mylrcsentence.h"
 
 #include <QWidget>
@@ -26,6 +28,14 @@ private:
 
     QString lrcFile;
     QVector<MyLRCSentence> lrcVector;
+
+    //time
+    qint64 currentPosition;
+
+    int getCurrentLine();
+
+public slots:
+    void flashCurrentPosition(qint64);
 };
 
 #endif // MYLRCWIDGET_H
