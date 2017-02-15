@@ -31,8 +31,6 @@ void MyLRCWidget::loadFile(const QString &fileName)
         file.close();
         analysisLrc(lrcVector);
     }
-
-    this->update();
 }
 
 void MyLRCWidget::paintEvent(QPaintEvent *)
@@ -40,34 +38,40 @@ void MyLRCWidget::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setPen(Qt::black);
 
-    int centerLine = (this->height() / LINESPACING) / 2;
+    qreal centerLine = this->height() / 2;
 
     if (lrcVector.isEmpty())
         painter.drawText(QRectF(this->rect()), Qt::AlignCenter, QString(QObject::tr("No File")));
     else {
         //current line (first paint line)
         int currentLine = getCurrentLine();
-        if (currentLine == -1)
+        if (currentLine < 0)
             return;
 
-        //draw current line (test
-        painter.drawText(QRectF(0, centerLine * LINESPACING, this->width(), LINESPACING),
-                         Qt::AlignHCenter, tr("center"));
+        //qDebug() << "lrc start paint";
 
+        //draw current line (test
+        painter.setPen(Qt::red);
+        painter.drawText(QRectF(0, centerLine, this->width(), LINESPACING),
+                         Qt::AlignHCenter, lrcVector.at(currentLine).getSentence());
+
+        painter.setPen(Qt::black);
         //draw up (test
-        int i = currentLine;
-        while (i != -1) {
-            i--;
-            painter.drawText(QRectF(0, i * LINESPACING, this->width(), LINESPACING),
-                             Qt::AlignHCenter, tr("up"));
+        int i = 0;
+        for (int index = currentLine - 1; index != -1; index--) {
+            i++;
+
+            painter.drawText(QRectF(0, centerLine - i * LINESPACING, this->width(), LINESPACING),
+                             Qt::AlignHCenter, lrcVector.at(index).getSentence());
         }
 
         //draw down
-        int j = currentLine;
-        while (j < lrcVector.size()) {
-            i++;
-            painter.drawText(QRectF(0, j * LINESPACING, this->width(), LINESPACING),
-                             Qt::AlignHCenter, tr("down"));
+        int j = 0;
+        for (int index = currentLine + 1; index < lrcVector.size() - 1; index++) {
+            j++;
+
+            painter.drawText(QRectF(0, centerLine + j * LINESPACING, this->width(), LINESPACING),
+                             Qt::AlignHCenter, lrcVector.at(index).getSentence());
         }
     }
 }
@@ -110,11 +114,19 @@ void MyLRCWidget::analysisLrc(QVector<MyLRCSentence> &lrc)
 
                 sent.setPosition(position);
                 sent.setSentence(rx.cap(4));
-                qDebug() << position << " " << rx.cap(4);
+                //qDebug() << position << " " << rx.cap(4);
 
                 lrc.push_back(sent);
             }
         }
+        qint64 positionEndMark = POSITIONENDMARK;
+        QString sentenceEndMark = SENTENCEENDMARK;
+
+        MyLRCSentence endMark;
+        endMark.setPosition(positionEndMark);
+        endMark.setSentence(sentenceEndMark);
+
+        lrc.push_back(endMark);
     }
 }
 
@@ -122,17 +134,21 @@ void MyLRCWidget::flashCurrentPosition(qint64 pos)
 {
     currentPosition = pos;
 
+    //qDebug() << "current position: " << currentPosition;
+
     this->update();
 }
 
 int MyLRCWidget::getCurrentLine()
 {
-    int ret = 0;
+    for (int i = 0; i < lrcVector.size(); i++) {
 
-    for (QVector<MyLRCSentence>::iterator iter = lrcVector.begin(); iter != lrcVector.end(); iter++) {
-        ret++;
-        if (iter->getPosition() == currentPosition)
-            return ret;
+        //use 'end_mark' to avoid 'at(i + 1)' make error
+        if (lrcVector.at(i).getPosition() == POSITIONENDMARK && lrcVector.at(i).getSentence() == SENTENCEENDMARK)
+            break;
+
+        if (lrcVector.at(i).getPosition() <= currentPosition && lrcVector.at(i + 1).getPosition() > currentPosition)
+            return i;
     }
 
     return -1;

@@ -1,7 +1,9 @@
 #ifndef MYLRCWIDGET_H
 #define MYLRCWIDGET_H
 
-#define LINESPACING 10
+#define LINESPACING 20.
+#define POSITIONENDMARK Q_INT64_C(932838457459459)
+#define SENTENCEENDMARK "end_mark"
 
 #include "mylrcsentence.h"
 

@@ -10,10 +10,10 @@ class MyLRCSentence
 public:
     MyLRCSentence();
     void setSentence(const QString &str);
-    QString getSentence();
+    QString getSentence() const;
 
     void setPosition(const qint64 &pos);
-    qint64 getPosition();
+    qint64 getPosition() const;
 private:
     qint64 position;
     QString sentence;
