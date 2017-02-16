@@ -1,7 +1,8 @@
 #ifndef MYLRCWIDGET_H
 #define MYLRCWIDGET_H
 
-#define LINESPACING 20.
+#define LINESPACING 25.
+#define FONTPIXELSIZE 16
 #define POSITIONENDMARK Q_INT64_C(932838457459459)
 #define SENTENCEENDMARK "end_mark"
 
@@ -37,6 +38,7 @@ private:
     int getCurrentLine();
 
 public slots:
+    void tryToLoadLRCFile(const QString &);
     void flashCurrentPosition(qint64);
 };
 

@@ -78,6 +78,7 @@ MyPlayer::MyPlayer(QWidget *parent) :
     QObject::connect(player, SIGNAL(flashMetaData(MyMetaData)), ui->infoWidget, SLOT(flashWidgetInfo(MyMetaData)));
 
     //flash lrc widget
+    QObject::connect(player, SIGNAL(expectLyricsPath(QString)), ui->LRCWidget, SLOT(tryToLoadLRCFile(QString)));
     QObject::connect(player, SIGNAL(positionChanged(qint64)), ui->LRCWidget, SLOT(flashCurrentPosition(qint64)));
 
     /************just test**************

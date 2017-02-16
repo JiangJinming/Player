@@ -9,11 +9,12 @@
 #include <QPainter>
 #include <QRectF>
 #include <QRegExp>
+#include <QFont>
+#include <QColor>
 
 MyLRCWidget::MyLRCWidget(QWidget *parent)
     : QWidget(parent)
 {
-    loadFile("E:/Users/jiang/Desktop/项目相关/testmusic/Let Down.lrc");
 }
 
 void MyLRCWidget::loadFile(const QString &fileName)
@@ -35,10 +36,15 @@ void MyLRCWidget::loadFile(const QString &fileName)
 
 void MyLRCWidget::paintEvent(QPaintEvent *)
 {
+    QFont lyricFont("Microsoft YaHei Ui");
+    lyricFont.setPixelSize(FONTPIXELSIZE);
+
     QPainter painter(this);
     painter.setPen(Qt::black);
+    painter.setFont(lyricFont);
+    painter.setRenderHint(QPainter::TextAntialiasing);
 
-    qreal centerLine = this->height() / 2;
+    qreal centerLine = this->height() / 2 - LINESPACING;
 
     if (lrcVector.isEmpty())
         painter.drawText(QRectF(this->rect()), Qt::AlignCenter, QString(QObject::tr("No File")));
@@ -50,13 +56,13 @@ void MyLRCWidget::paintEvent(QPaintEvent *)
 
         //qDebug() << "lrc start paint";
 
-        //draw current line (test
-        painter.setPen(Qt::red);
+        //draw current line
+        painter.setPen(QColor(150, 150, 150));
         painter.drawText(QRectF(0, centerLine, this->width(), LINESPACING),
                          Qt::AlignHCenter, lrcVector.at(currentLine).getSentence());
 
         painter.setPen(Qt::black);
-        //draw up (test
+        //draw up
         int i = 0;
         for (int index = currentLine - 1; index != -1; index--) {
             i++;
@@ -78,13 +84,10 @@ void MyLRCWidget::paintEvent(QPaintEvent *)
 
 void MyLRCWidget::analysisLrc(QVector<MyLRCSentence> &lrc)
 {
-    MyLRCSentence sentence;
-    QFile file(lrcFile);
+    //clear last data
+    lrc.clear();
 
-    /**********test**********
-    sentence.setSentence("test");
-    lrc.push_back(sentence);
-    ************************/
+    QFile file(lrcFile);
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "open LRC file fail (in analysisLrc function)";
@@ -152,4 +155,9 @@ int MyLRCWidget::getCurrentLine()
     }
 
     return -1;
+}
+
+void MyLRCWidget::tryToLoadLRCFile(const QString &fileName)
+{
+    this->loadFile(fileName);
 }

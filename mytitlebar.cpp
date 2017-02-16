@@ -15,7 +15,7 @@
 MyTitleBar::MyTitleBar(QWidget *parent)
     : QWidget(parent)
 {
-    titleColor = new QColor(198, 47, 47);
+    titleColor = new QColor(240, 240, 240);
 
     minimizeButton = new MyTitleBarButton(this);
     minimizeButton->setFixedSize(20, 20);
@@ -89,7 +89,7 @@ void MyTitleBar::paintEvent(QPaintEvent *)
     QPainter painter(this);
 
     painter.setBrush(QBrush(*titleColor));
-    painter.drawRect(-1, 0, this->width() + 1, this->height());
+    painter.drawRect(-1, -1, this->width() + 1, this->height() + 1);
 }
 
 void MyTitleBar::setTitleColor(const QColor &color)

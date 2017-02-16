@@ -5,6 +5,8 @@
 
 #include <QMediaPlayer>
 
+class QString;
+
 class MyMediaPlayer : public QMediaPlayer
 {
     Q_OBJECT
@@ -21,13 +23,16 @@ public slots:
 
 private slots:
     void sendMetaData();
+    void sendLyricsPath();
 
 signals:
     void flashMetaData(const MyMetaData &);
+    void expectLyricsPath(const QString &);
 
 private:
     QMediaPlayer::State state;
     MyMetaData data;
+    QString lyricsPath;
 };
 
 #endif // MYMEDIAPLAYER_H

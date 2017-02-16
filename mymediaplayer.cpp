@@ -3,6 +3,7 @@
 #include <QVariant>
 #include <QDebug>
 #include <QImage>
+#include <QString>
 
 MyMediaPlayer::MyMediaPlayer(QObject *parent) :
     QMediaPlayer(parent)
@@ -11,7 +12,9 @@ MyMediaPlayer::MyMediaPlayer(QObject *parent) :
 
     QObject::connect(this, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(getState(QMediaPlayer::State)));
     //send meta data
-    QObject::connect(this, SIGNAL(durationChanged(qint64)), this, SLOT(sendMetaData()));
+    QObject::connect(this, SIGNAL(metaDataChanged()), this, SLOT(sendMetaData()));
+    //send a expect lyrics
+    QObject::connect(this, SIGNAL(metaDataChanged()), this, SLOT(sendLyricsPath()));
 }
 
 void MyMediaPlayer::setPlayerPositionValue(int pos)
@@ -53,4 +56,19 @@ void MyMediaPlayer::sendMetaData()
     data.year = this->metaData("Year").toString();
 
     emit flashMetaData(data);
+}
+
+void MyMediaPlayer::sendLyricsPath()
+{
+    QString lyricsPath = this->currentMedia().canonicalUrl().path();
+    lyricsPath.remove(0, 1);
+
+    int i = lyricsPath.size() - 1;
+    while (lyricsPath[i] != '.')
+        i--;
+    lyricsPath.remove(i, lyricsPath.size() - i);
+
+    lyricsPath.push_back(tr(".lrc"));
+
+    emit expectLyricsPath(lyricsPath);
 }
