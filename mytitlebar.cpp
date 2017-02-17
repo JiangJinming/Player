@@ -101,21 +101,21 @@ void MyTitleBar::setTitleColor(const QColor &color)
 
 void MyTitleBar::minimizeButtonClicked()
 {
-    qDebug() << "emit 'Minimize' signal";
+    //qDebug() << "emit 'Minimize' signal";
 
     emit windowStateChanged(MyTitleBar::Minimize);
 }
 
 void MyTitleBar::maximizeButtonClicked()
 {
-    qDebug() << "emit 'Maximize' signal";
+    //qDebug() << "emit 'Maximize' signal";
 
     emit windowStateChanged(MyTitleBar::Maximize);
 }
 
 void MyTitleBar::closeButtonClicked()
 {
-    qDebug() << "emit 'Close' signal";
+    //qDebug() << "emit 'Close' signal";
 
     emit windowStateChanged(MyTitleBar::Close);
 

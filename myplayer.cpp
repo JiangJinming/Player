@@ -46,6 +46,7 @@ MyPlayer::MyPlayer(QWidget *parent) :
     QObject::connect(ui->volumeHorizontalSlider, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
     QObject::connect(player, SIGNAL(volumeChanged(int)), ui->volumeHorizontalSlider, SLOT(setValue(int)));
     QObject::connect(player, SIGNAL(volumeChanged(int)), this, SLOT(setVolumeLabelValue(int)));
+    QObject::connect(player, SIGNAL(volumeChanged(int)), this, SLOT(getVolume(int)));
 
     //control position
     QObject::connect(ui->positionHorizontalSlider, SIGNAL(sliderMoved(int)), player, SLOT(setPlayerPositionValue(int)));
@@ -114,6 +115,11 @@ void MyPlayer::setVolumeLabelValue(int vol)
     ui->volumeLabel->setText(QString::number(vol));
 }
 
+void MyPlayer::getVolume(int vol)
+{
+    volume = vol;
+}
+
 void MyPlayer::setSliderPostionValue(qint64 pos)
 {
 
@@ -146,6 +152,8 @@ void MyPlayer::loadMedia()
         if (ret == QMessageBox::Ok)
             addDir();
     }
+    else
+        searchLocalFiles();
 }
 
 void MyPlayer::addDir()
@@ -171,7 +179,6 @@ void MyPlayer::searchLocalFiles()
 {
     //clear all from playList and filesList
     playList->clear();
-    ui->filesListWidget->clear();
 
     int i;
     int k;
@@ -201,10 +208,17 @@ void MyPlayer::searchLocalFiles()
          << "E:/Users/jiang/Desktop/testmusic/Crazy Train.mp3";
     ***********************************/
 
-    for (k = 0; k < filesList.size(); k++) {
+    for (k = 0; k < filesList.size(); k++)
         playList->addMedia(QUrl::fromLocalFile(filesList.at(k)));
-        QListWidgetItem *fileItem = new QListWidgetItem;
-        fileItem->setText(QFileInfo(filesList.at(k)).baseName());
+
+    //flash filesListWidget
+    ui->filesListWidget->clear();
+    for (int l = 0; l < playList->mediaCount(); l++) {
+        QListWidgetItem *fileItem = new QListWidgetItem(ui->filesListWidget);
+        QFile file(playList->media(l).canonicalUrl().path());
+
+        fileItem->setText(QFileInfo(file).baseName());
+
         ui->filesListWidget->addItem(fileItem);
     }
 }
@@ -241,6 +255,7 @@ void MyPlayer::setPlaybackMode()
     switch (playbackMode) {
     case QMediaPlaylist::CurrentItemOnce:
         playList->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+        ui->playbackModeButton->setIcon(QIcon(":/icon/CurrentItemOnce.png"));
 
         //change icon and other
         break;
@@ -293,19 +308,12 @@ void MyPlayer::saveCurrentInfo()
 
     //save setting
     QSettings settings("sets.ini", QSettings::IniFormat);
-    settings.setValue("duration", duration);
-    //settings.setValue("playerstate", state);
-    settings.setValue("position", position);
     settings.setValue("volume", volume);
-    settings.setValue("playbackmode", playbackMode);
+    settings.setValue("playbackMode", playbackMode);
 }
 
 void MyPlayer::init()
 {
-    //set title bar size
-    ui->titleBar->setGeometry(0, 0, this->width(), 75);
-
-
     int dirListCount;
 
     QFile DirListData("DirList.dat");
@@ -313,7 +321,7 @@ void MyPlayer::init()
 
     QDataStream in(&DirListData);
     in >> dirListCount;
-    qDebug() << "init list count:" << dirListCount;
+    //qDebug() << "init list count:" << dirListCount;
     for(int i = 0; i < dirListCount; i++) {
         QString text;
         in >> text;
@@ -322,13 +330,8 @@ void MyPlayer::init()
         ui->dirListWidget->addItem(text);
     }
 
-    QSettings settings("sets.ini", "Player");
-    //playList->setCurrentIndex(static_cast<qint64>(settings.value("duration").toInt()));
-
-    //state = static_cast<MyMediaPlayer::State>(settings.value("playerstate").toInt());
-    //this->setPlayerState();
-
-    player->setPlayerPositionValue(settings.value("position").toInt());
+    //read setting
+    QSettings settings("sets.ini", QSettings::IniFormat);
     player->setVolume(settings.value("volume").toInt());
 
     playbackMode = static_cast<QMediaPlaylist::PlaybackMode>(settings.value("playbackmode").toInt());

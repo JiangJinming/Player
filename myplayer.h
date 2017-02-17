@@ -26,7 +26,9 @@ public:
 public slots:
     void getDuration(qint64);
 
+    //volume
     void setVolumeLabelValue(int);
+    void getVolume(int);
 
     void setSliderPostionValue(qint64);
     void setPositionLabelValue(qint64);

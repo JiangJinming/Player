@@ -54,7 +54,7 @@ void MyTitleBarButton::paintEvent(QPaintEvent *)
 void MyTitleBarButton::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        qDebug() << "press";
+        //qDebug() << "press";
 
         mainIcon = *clickIcon;
         this->update();
@@ -66,7 +66,7 @@ void MyTitleBarButton::mousePressEvent(QMouseEvent *event)
 void MyTitleBarButton::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-    qDebug() << "release";
+    //qDebug() << "release";
 
     mainIcon = *defaultIcon;
     this->update();

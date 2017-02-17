@@ -64,7 +64,7 @@ void MyMediaPlayer::sendLyricsPath()
     lyricsPath.remove(0, 1);
 
     int i = lyricsPath.size() - 1;
-    while (lyricsPath[i] != '.')
+    while (i >= 0 && lyricsPath[i] != '.')
         i--;
     lyricsPath.remove(i, lyricsPath.size() - i);
 
