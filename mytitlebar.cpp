@@ -17,17 +17,17 @@ MyTitleBar::MyTitleBar(QWidget *parent)
 {
     titleColor = new QColor(240, 240, 240);
 
+    trayIconButton = new MyTitleBarButton(this);
+    trayIconButton->setFixedSize(20, 20);
+    trayIconButton->setBackgroundColor(*titleColor);
+    trayIconButton->setDefaultIcon(":/icon/titlebarIcons/maximizeDefaultIcon.png");
+    trayIconButton->setClickedIcon(":/icon/titlebarIcons/maximizeClickIcon.png");
+
     minimizeButton = new MyTitleBarButton(this);
     minimizeButton->setFixedSize(20, 20);
     minimizeButton->setBackgroundColor(*titleColor);
     minimizeButton->setDefaultIcon(":/icon/titlebarIcons/minimizeDefaultIcon.png");
     minimizeButton->setClickedIcon(":/icon/titlebarIcons/minimizeClickIcon.png");
-
-    maximizeButton = new MyTitleBarButton(this);
-    maximizeButton->setFixedSize(20, 20);
-    maximizeButton->setBackgroundColor(*titleColor);
-    maximizeButton->setDefaultIcon(":/icon/titlebarIcons/maximizeDefaultIcon.png");
-    maximizeButton->setClickedIcon(":/icon/titlebarIcons/maximizeClickIcon.png");
 
     closeButton = new MyTitleBarButton(this);
     closeButton->setFixedSize(20, 20);
@@ -35,8 +35,8 @@ MyTitleBar::MyTitleBar(QWidget *parent)
     closeButton->setDefaultIcon(":/icon/titlebarIcons/closeDefaultIcon.png");
     closeButton->setClickedIcon(":/icon/titlebarIcons/closeClickIcon.png");
 
+    QObject::connect(trayIconButton, SIGNAL(buttonClicked()), this, SLOT(trayIconButtonClicked()));
     QObject::connect(minimizeButton, SIGNAL(buttonClicked()), this, SLOT(minimizeButtonClicked()));
-    QObject::connect(maximizeButton, SIGNAL(buttonClicked()), this, SLOT(maximizeButtonClicked()));
     QObject::connect(closeButton, SIGNAL(buttonClicked()), this, SLOT(closeButtonClicked()));
 
     mainHLayout = new QHBoxLayout(this);
@@ -46,8 +46,8 @@ MyTitleBar::MyTitleBar(QWidget *parent)
                                      QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     mainHLayout->addItem(HLeftSpacerItem);
+    mainHLayout->addWidget(trayIconButton);
     mainHLayout->addWidget(minimizeButton);
-    mainHLayout->addWidget(maximizeButton);
     mainHLayout->addWidget(closeButton);
     mainHLayout->addSpacerItem(HRightSpacerItem);
 }
@@ -79,11 +79,6 @@ void MyTitleBar::mouseReleaseEvent(QMouseEvent *)
     mousePressed = false;
 }
 
-void MyTitleBar::mouseDoubleClickEvent(QMouseEvent *)
-{
-    emit windowStateChanged(MyTitleBar::Maximize);
-}
-
 void MyTitleBar::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -99,18 +94,18 @@ void MyTitleBar::setTitleColor(const QColor &color)
     this->update();
 }
 
+void MyTitleBar::trayIconButtonClicked()
+{
+    //qDebug() << "emit 'Tray' signal";
+
+    emit windowStateChanged(MyTitleBar::Tray);
+}
+
 void MyTitleBar::minimizeButtonClicked()
 {
     //qDebug() << "emit 'Minimize' signal";
 
     emit windowStateChanged(MyTitleBar::Minimize);
-}
-
-void MyTitleBar::maximizeButtonClicked()
-{
-    //qDebug() << "emit 'Maximize' signal";
-
-    emit windowStateChanged(MyTitleBar::Maximize);
 }
 
 void MyTitleBar::closeButtonClicked()

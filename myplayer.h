@@ -5,11 +5,14 @@
 
 #include <QMainWindow>
 #include <QMediaPlaylist>
+#include <QSystemTrayIcon>
 
 class MyMediaPlayer;
 class QListWidgetItem;
 class QCloseEvent;
 class QPoint;
+class QAction;
+class QMenu;
 
 namespace Ui {
 class MyPlayer;
@@ -43,6 +46,8 @@ public slots:
     void moveWindow(const QPoint &point);
     void setMainWindowState(MyTitleBar::WindowState state);
 
+    void dealWithTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
+
 private:
     Ui::MyPlayer *ui;
 
@@ -51,7 +56,7 @@ private:
     QMediaPlaylist *playList;
     void loadMedia();
 
-    //control
+    //media control
     qint64 duration;
     qint64 position;
     int volume;
@@ -63,8 +68,16 @@ private:
     //init
     void init();
 
-    //when clicked closeButton(titlebar)
+    //control window state
+    void hideWindow();
     void closeWindow();
+
+    //trayIcon
+    QAction *showTheWindow;
+    QAction *exitProgram;
+
+    QMenu *trayMenu;
+    QSystemTrayIcon *trayIcon;
 
 protected:
     void closeEvent(QCloseEvent *);

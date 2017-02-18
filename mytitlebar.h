@@ -20,14 +20,14 @@ public:
     MyTitleBar(QWidget *parent = 0);
     ~MyTitleBar();
 
-    enum WindowState{Minimize, Maximize, Close};
+    enum WindowState{Tray, Minimize, Close};
 
 public slots:
     void setTitleColor(const QColor &color);
 
     //button clicked
+    void trayIconButtonClicked();
     void minimizeButtonClicked();
-    void maximizeButtonClicked();
     void closeButtonClicked();
 
 signals:
@@ -38,11 +38,10 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *);
-    void mouseDoubleClickEvent(QMouseEvent *);
     void paintEvent(QPaintEvent *);
 
+    MyTitleBarButton *trayIconButton;
     MyTitleBarButton *minimizeButton;
-    MyTitleBarButton *maximizeButton;
     MyTitleBarButton *closeButton;
 
     QHBoxLayout *mainHLayout;

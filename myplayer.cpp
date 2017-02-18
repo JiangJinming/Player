@@ -22,6 +22,8 @@
 #include <QDataStream>
 #include <QSettings>
 #include <QPoint>
+#include <QAction>
+#include <QMenu>
 
 MyPlayer::MyPlayer(QWidget *parent) :
     QMainWindow(parent),
@@ -33,6 +35,21 @@ MyPlayer::MyPlayer(QWidget *parent) :
     playList = new QMediaPlaylist(this);
 
     player->setPlaylist(playList);
+
+    //init trayIcon action
+    showTheWindow = new QAction(QString("show window"), this);
+    exitProgram = new QAction(QString("exit"), this);
+
+    trayMenu = new QMenu(this);
+    trayMenu->addAction(showTheWindow);
+    trayMenu->addAction(exitProgram);
+
+    QIcon icon = QIcon(":/icon/coverIcon.png");
+    trayIcon = new QSystemTrayIcon(this);
+    trayIcon->setIcon(icon);
+    trayIcon->setToolTip(QString("Music Player"));
+    trayIcon->setContextMenu(trayMenu);
+
 
     /************just test*************
     playList->addMedia(QUrl::fromLocalFile("E:/Users/jiang/Desktop/testmusic/All Along the Watchtower.mp3"));
@@ -82,12 +99,16 @@ MyPlayer::MyPlayer(QWidget *parent) :
     QObject::connect(player, SIGNAL(expectLyricsPath(QString)), ui->LRCWidget, SLOT(tryToLoadLRCFile(QString)));
     QObject::connect(player, SIGNAL(positionChanged(qint64)), ui->LRCWidget, SLOT(flashCurrentPosition(qint64)));
 
+    //tray icon
+    QObject::connect(showTheWindow, SIGNAL(triggered(bool)), this, SLOT(show()));
+    QObject::connect(exitProgram, SIGNAL(triggered(bool)), this, SLOT(close()));
+    QObject::connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(dealWithTrayIconActivated(QSystemTrayIcon::ActivationReason)));
+
     /************just test**************
     player->setVolume(50);
     player->play();
     ***********************************/
 
-    //init
     init();
 }
 
@@ -348,12 +369,12 @@ void MyPlayer::moveWindow(const QPoint &point)
 void MyPlayer::setMainWindowState(MyTitleBar::WindowState state)
 {
     switch (state) {
-    case MyTitleBar::Minimize:
-        this->setWindowState(Qt::WindowMinimized);
+    case MyTitleBar::Tray:
+        this->hideWindow();
         break;
 
-    case MyTitleBar::Maximize:
-        this->setWindowState(Qt::WindowMaximized);
+    case MyTitleBar::Minimize:
+        this->setWindowState(Qt::WindowMinimized);
         break;
 
     case MyTitleBar::Close:
@@ -368,4 +389,17 @@ void MyPlayer::setMainWindowState(MyTitleBar::WindowState state)
 void MyPlayer::closeWindow()
 {
     this->close();
+}
+
+void MyPlayer::hideWindow()
+{
+    this->hide();
+
+    trayIcon->show();
+}
+
+void MyPlayer::dealWithTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    if (reason == QSystemTrayIcon::Trigger)
+        this->show();
 }
